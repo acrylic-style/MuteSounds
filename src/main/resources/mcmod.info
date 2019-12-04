@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mutesounds",
+  "name": "Mute Sounds",
+  "description": "Simple mod that mutes some sounds.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["acrylic-style"],
+  "credits": "https://github.com/acrylic-style",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
