@@ -1,0 +1,25 @@
+config.mutesounds._name=Mute Sounds Configuration
+
+config.mutesounds.misc._name=Misc
+config.mutesounds.misc.connectToServerAtStartup=Connect to server at startup
+config.mutesounds.misc.serverAddress=Server Address
+config.mutesounds.misc.port=Server Port
+
+config.mutesounds.misc.overlays._name=Overlays
+config.mutesounds.misc.overlays.positionOverlay=Position Overlay
+config.mutesounds.misc.overlays.gammaOverlay=Gamma Overlay
+config.mutesounds.misc.overlays.pingOverlay=Ping Overlay
+
+config.mutesounds.misc.gammaBright._name=Gamma Bright
+config.mutesounds.misc.gammaBright.gamma=Gamma
+
+config.mutesounds.blocks._name=Blocks
+config.mutesounds.blocks.grass=Grass
+config.mutesounds.blocks.gravel=Gravel
+config.mutesounds.blocks.stone=Stone
+config.mutesounds.blocks.glass=Glass
+config.mutesounds.blocks.water=Water
+config.mutesounds.blocks.portal=Nether Portal
+
+config.mutesounds.mobs._name=Mobs
+config.mutesounds.mobs.endermans=Enderman
