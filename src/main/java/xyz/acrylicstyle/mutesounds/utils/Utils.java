@@ -5,10 +5,7 @@ import util.Collection;
 import util.CollectionList;
 import xyz.acrylicstyle.mutesounds.commands.FullBright;
 import xyz.acrylicstyle.mutesounds.commands.Help;
-import xyz.acrylicstyle.mutesounds.overlays.GammaOverlay;
-import xyz.acrylicstyle.mutesounds.overlays.Overlay;
-import xyz.acrylicstyle.mutesounds.overlays.PingOverlay;
-import xyz.acrylicstyle.mutesounds.overlays.PositionOverlay;
+import xyz.acrylicstyle.mutesounds.overlays.*;
 
 public final class Utils {
     private Utils() {}
@@ -24,6 +21,7 @@ public final class Utils {
         overlays.add(new PositionOverlay(Minecraft.getMinecraft()));
         overlays.add(new GammaOverlay(Minecraft.getMinecraft()));
         overlays.add(new PingOverlay(Minecraft.getMinecraft()));
+        overlays.add(new ArmorOverlay(Minecraft.getMinecraft()));
     }
 
     public static final char SECTION = '\u00a7';

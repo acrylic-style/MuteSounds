@@ -108,6 +108,11 @@ public class MuteSounds {
         } else {
             Utils.activeOverlays.remove(Utils.overlays.get(2));
         }
+        if (Configuration.misc.overlays.armorOverlay) {
+            Utils.activeOverlays.add(Utils.overlays.get(3));
+        } else {
+            Utils.activeOverlays.remove(Utils.overlays.get(3));
+        }
     }
 
     @SubscribeEvent
@@ -177,14 +182,17 @@ public class MuteSounds {
 
                 @LangKey("config.mutesounds.misc.overlays.pingOverlay")
                 public boolean pingOverlay = false;
+
+                @LangKey("config.mutesounds.misc.overlays.armorOverlay")
+                public boolean armorOverlay = false;
             }
 
             @LangKey("config.mutesounds.misc.gammaBright._name")
             public GammaBright gammaBright = new GammaBright();
             public static class GammaBright {
-                @Config.RangeInt(min = 0, max = 1500)
+                @Config.RangeInt(min = -15000, max = 15000)
                 @LangKey("config.mutesounds.misc.gammaBright.gamma")
-                public double gamma = 1500;
+                public double gamma = 15000;
             }
         }
 

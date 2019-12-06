@@ -9,6 +9,7 @@ config.mutesounds.misc.overlays._name=Overlays
 config.mutesounds.misc.overlays.positionOverlay=Position Overlay
 config.mutesounds.misc.overlays.gammaOverlay=Gamma Overlay
 config.mutesounds.misc.overlays.pingOverlay=Ping Overlay
+config.mutesounds.misc.overlays.armorOverlay=Armor Overlay
 
 config.mutesounds.misc.gammaBright._name=Gamma Bright
 config.mutesounds.misc.gammaBright.gamma=Gamma
