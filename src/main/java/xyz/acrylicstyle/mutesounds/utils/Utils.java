@@ -3,8 +3,7 @@ package xyz.acrylicstyle.mutesounds.utils;
 import net.minecraft.client.Minecraft;
 import util.Collection;
 import util.CollectionList;
-import xyz.acrylicstyle.mutesounds.commands.FullBright;
-import xyz.acrylicstyle.mutesounds.commands.Help;
+import xyz.acrylicstyle.mutesounds.commands.*;
 import xyz.acrylicstyle.mutesounds.overlays.*;
 
 public final class Utils {
@@ -17,6 +16,8 @@ public final class Utils {
     static {
         commands.add("help", new Help());
         commands.add("fullbright", new FullBright());
+        commands.add("say", new Say());
+        commands.add("saycolored", new SayColored());
 
         overlays.add(new PositionOverlay(Minecraft.getMinecraft()));
         overlays.add(new GammaOverlay(Minecraft.getMinecraft()));
