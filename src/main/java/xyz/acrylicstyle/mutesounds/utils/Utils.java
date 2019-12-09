@@ -6,12 +6,20 @@ import util.CollectionList;
 import xyz.acrylicstyle.mutesounds.commands.*;
 import xyz.acrylicstyle.mutesounds.overlays.*;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public final class Utils {
     private Utils() {}
 
     public static final Collection<String, PeriodCommand> commands = new Collection<>();
     public static final CollectionList<Overlay> overlays = new CollectionList<>();
     public static final CollectionList<Overlay> activeOverlays = new CollectionList<>();
+
+    public static boolean isPinged = false;
+    public static long ping = 0;
 
     static {
         commands.add("help", new Help());
@@ -36,5 +44,24 @@ public final class Utils {
             s = s.replaceFirst("@@@", obj.toString());
         }
         return s;
+    }
+
+    public static void startPingTimer() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (Minecraft.getMinecraft().getCurrentServerData() == null) {
+                    this.cancel();
+                    return;
+                }
+                long currentTime = System.currentTimeMillis();
+                try {
+                    isPinged = InetAddress.getByName(Minecraft.getMinecraft().getCurrentServerData().serverIP).isReachable(2000); // 5 seconds
+                    ping = System.currentTimeMillis() - currentTime;
+                } catch (IOException ignored) {}
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, 0, 1000*10);
     }
 }
