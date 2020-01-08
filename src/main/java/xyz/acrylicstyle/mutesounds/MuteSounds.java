@@ -109,10 +109,10 @@ public class MuteSounds {
         } else {
             Utils.activeOverlays.remove(Utils.overlays.get(2));
         }
-        if (Configuration.misc.overlays.armorOverlay) {
-            Utils.activeOverlays.add(Utils.overlays.get(3));
+        if (Configuration.misc.overlays.fpsOverlay) {
+            Utils.activeOverlays.add(Utils.overlays.get(4));
         } else {
-            Utils.activeOverlays.remove(Utils.overlays.get(3));
+            Utils.activeOverlays.remove(Utils.overlays.get(4));
         }
     }
 
@@ -186,6 +186,9 @@ public class MuteSounds {
 
                 @LangKey("config.mutesounds.misc.overlays.armorOverlay")
                 public boolean armorOverlay = false;
+
+                @LangKey("config.mutesounds.misc.overlays.fpsOverlay")
+                public boolean fpsOverlay = false;
             }
 
             @LangKey("config.mutesounds.misc.gammaBright._name")
@@ -323,6 +326,7 @@ public class MuteSounds {
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent.Post e) {
         if (e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) return;
+        if (Configuration.misc.overlays.armorOverlay) Utils.overlays.get(3).draw();
         Utils.activeOverlays.forEach(Overlay::draw);
     }
 }

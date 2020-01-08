@@ -31,6 +31,7 @@ public final class Utils {
         overlays.add(new GammaOverlay(Minecraft.getMinecraft()));
         overlays.add(new PingOverlay(Minecraft.getMinecraft()));
         overlays.add(new ArmorOverlay(Minecraft.getMinecraft()));
+        overlays.add(new FPSOverlay(Minecraft.getMinecraft()));
     }
 
     public static final char SECTION = '\u00a7';
