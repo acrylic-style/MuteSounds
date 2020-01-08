@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
@@ -82,12 +81,8 @@ public class MuteSounds {
         ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
         Minecraft.getMinecraft().gameSettings.gammaSetting = 1;
         overlayCheck();
-        if (Configuration.misc.connectToServerAtStartup) FMLClientHandler.instance().connectToServerAtStartup(Configuration.misc.serverAddress, Configuration.misc.port);
-    }
-
-    @SubscribeEvent
-    public static void onClientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent e) {
         Utils.startPingTimer();
+        if (Configuration.misc.connectToServerAtStartup) FMLClientHandler.instance().connectToServerAtStartup(Configuration.misc.serverAddress, Configuration.misc.port);
     }
 
     @SubscribeEvent

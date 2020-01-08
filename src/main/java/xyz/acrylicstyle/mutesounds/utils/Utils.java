@@ -51,15 +51,16 @@ public final class Utils {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                if (Minecraft.getMinecraft().getCurrentServerData() == null) {
-                    this.cancel();
-                    return;
+                if (Minecraft.getMinecraft().getCurrentServerData() != null) {
+                    String address = Minecraft.getMinecraft().getCurrentServerData().serverIP.replaceAll(":.*", "");
+                    try {
+                        long currentTime = System.currentTimeMillis();
+                        isPinged = InetAddress.getByName(address).isReachable(9000); // 5 seconds
+                        ping = System.currentTimeMillis() - currentTime;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                long currentTime = System.currentTimeMillis();
-                try {
-                    isPinged = InetAddress.getByName(Minecraft.getMinecraft().getCurrentServerData().serverIP).isReachable(2000); // 5 seconds
-                    ping = System.currentTimeMillis() - currentTime;
-                } catch (IOException ignored) {}
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 1000*10);
