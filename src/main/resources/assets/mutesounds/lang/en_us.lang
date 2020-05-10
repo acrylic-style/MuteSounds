@@ -25,3 +25,7 @@ config.mutesounds.blocks.portal=Nether Portal
 
 config.mutesounds.mobs._name=Mobs
 config.mutesounds.mobs.endermans=Enderman
+
+config.mutesounds.entity._name=Entity
+config.mutesounds.entity.generic=Generic (entity.generic.*)
+config.mutesounds.entity.player=Player (entity.player.*)

@@ -11,7 +11,7 @@ import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 import static xyz.acrylicstyle.mutesounds.utils.Utils.translateChatColor;
 
-public class FullBright extends PeriodCommand {
+public class FullBrightCommand extends PeriodCommand {
     @Override
     public void execute(String message, String originalMessage, String[] args) {
         double gamma;

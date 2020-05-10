@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 public class GammaOverlay implements Overlay {
-    private Minecraft minecraft;
+    private final Minecraft minecraft;
 
     public GammaOverlay(Minecraft minecraft) {
         this.minecraft = minecraft;

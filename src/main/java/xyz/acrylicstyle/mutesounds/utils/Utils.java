@@ -22,10 +22,11 @@ public final class Utils {
     public static long ping = 0;
 
     static {
-        commands.add("help", new Help());
-        commands.add("fullbright", new FullBright());
-        commands.add("say", new Say());
-        commands.add("saycolored", new SayColored());
+        commands.add("help", new HelpCommand());
+        commands.add("fullbright", new FullBrightCommand());
+        commands.add("say", new SayCommand());
+        commands.add("saycolored", new SayColoredCommand());
+        commands.add("debug", new DebugCommand());
 
         overlays.add(new PositionOverlay(Minecraft.getMinecraft()));
         overlays.add(new GammaOverlay(Minecraft.getMinecraft()));
@@ -36,14 +37,12 @@ public final class Utils {
 
     public static final char SECTION = '\u00a7';
 
-    public static String translateChatColor(String s) {
-        return s.replaceAll("&", String.valueOf(SECTION));
+    public static String translateChatColor(String message) {
+        return message.replaceAll("&", String.valueOf(SECTION));
     }
 
     public static String format(String s, Object... o) {
-        for (Object obj : o) {
-            s = s.replaceFirst("@@@", obj.toString());
-        }
+        for (Object obj : o) s = s.replaceFirst("@@@", obj.toString());
         return s;
     }
 
@@ -56,11 +55,9 @@ public final class Utils {
                     String address = Minecraft.getMinecraft().getCurrentServerData().serverIP.replaceAll(":.*", "");
                     try {
                         long currentTime = System.currentTimeMillis();
-                        isPinged = InetAddress.getByName(address).isReachable(9000); // 5 seconds
+                        isPinged = InetAddress.getByName(address).isReachable(9000);
                         ping = System.currentTimeMillis() - currentTime;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (IOException ignored) {}
                 }
             }
         };

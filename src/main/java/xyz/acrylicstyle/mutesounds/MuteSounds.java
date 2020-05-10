@@ -11,9 +11,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.LangKey;
-import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.config.Property;
@@ -30,19 +28,21 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
+import util.CollectionList;
+import util.ICollectionList;
 import xyz.acrylicstyle.mutesounds.overlays.Overlay;
 import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.regex.Pattern;
 
+import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.*;
 import static xyz.acrylicstyle.mutesounds.utils.Utils.translateChatColor;
 
 @Mod(modid = MuteSounds.MOD_ID, name = MuteSounds.NAME, version = MuteSounds.VERSION)
 public class MuteSounds {
+    public static final String PREFIX = ".";
     public static final String MOD_ID = "mutesounds";
     public static final String NAME = "Mute Sounds";
     public static final String VERSION = "1.0";
@@ -147,143 +147,54 @@ public class MuteSounds {
                 || (Configuration.blocks.portal.muteAmbientSound && e.getName().equals("block.portal.ambient"))
                 || (Configuration.blocks.portal.muteTravelSound && e.getName().equals("block.portal.travel"))
                 || (Configuration.blocks.portal.muteTriggerSound && e.getName().equals("block.portal.trigger"))
-                || (Configuration.blocks.water.muteWaterFlowSound && e.getName().equals("block.water.ambient"))) e.setResultSound(null);
+                || (Configuration.blocks.water.muteWaterFlowSound && e.getName().equals("block.water.ambient"))
+                // entity.generic.*
+                || (Configuration.entity.generic.muteBigFall && e.getName().equals("entity.generic.big_fall"))
+                || (Configuration.entity.generic.muteBurn && e.getName().equals("entity.generic.burn"))
+                || (Configuration.entity.generic.muteDeath && e.getName().equals("entity.generic.death"))
+                || (Configuration.entity.generic.muteDrink && e.getName().equals("entity.generic.drink"))
+                || (Configuration.entity.generic.muteEat && e.getName().equals("entity.generic.eat"))
+                || (Configuration.entity.generic.muteExplode && e.getName().equals("entity.generic.explode"))
+                || (Configuration.entity.generic.muteExtinguishFire && e.getName().equals("entity.generic.extinguish_fire"))
+                || (Configuration.entity.generic.muteHurt && e.getName().equals("entity.generic.hurt"))
+                || (Configuration.entity.generic.muteSmallFall && e.getName().equals("entity.generic.small_fall"))
+                || (Configuration.entity.generic.muteSplash && e.getName().equals("entity.generic.splash"))
+                || (Configuration.entity.generic.muteSwim && e.getName().equals("entity.generic.swim"))
+                // entity.player.attack.*
+                || (Configuration.entity.player.muteAttack_crit && e.getName().equals("entity.player.attack.crit"))
+                || (Configuration.entity.player.muteAttack_knockback && e.getName().equals("entity.player.attack.knockback"))
+                || (Configuration.entity.player.muteAttack_nodamage && e.getName().equals("entity.player.attack.nodamage"))
+                || (Configuration.entity.player.muteAttack_strong && e.getName().equals("entity.player.attack.strong"))
+                || (Configuration.entity.player.muteAttack_sweep && e.getName().equals("entity.player.attack.sweep"))
+                || (Configuration.entity.player.muteAttack_weak && e.getName().equals("entity.player.attack.weak"))
+                // entity.player.*
+                || (Configuration.entity.player.muteBigFall && e.getName().equals("entity.player.big_fall"))
+                || (Configuration.entity.player.muteBreath && e.getName().equals("entity.player.breath"))
+                || (Configuration.entity.player.muteBurp && e.getName().equals("entity.player.burp"))
+                || (Configuration.entity.player.muteDeath && e.getName().equals("entity.player.death"))
+                || (Configuration.entity.player.muteHurt && e.getName().equals("entity.player.hurt"))
+                || (Configuration.entity.player.muteHurtDrown && e.getName().equals("entity.player.hurt_drown"))
+                || (Configuration.entity.player.muteHurtOnFire && e.getName().equals("entity.player.hurt_on_fire"))
+                || (Configuration.entity.player.muteLevelup && e.getName().equals("entity.player.levelup"))
+                || (Configuration.entity.player.muteSmallFall && e.getName().equals("entity.player.small_fall"))
+                || (Configuration.entity.player.muteSplash && e.getName().equals("entity.player.splash"))
+                || (Configuration.entity.player.muteSwim && e.getName().equals("entity.player.swim"))) e.setResultSound(null);
     }
 
     @Config(modid = MOD_ID)
-    @SuppressWarnings("unused")
     @LangKey("config.mutesounds._name")
     public static class Configuration {
         @LangKey("config.mutesounds.misc._name")
         public static Misc misc = new Misc();
 
-        public static class Misc {
-            @Comment("Will connect to server at startup or not")
-            @LangKey("config.mutesounds.misc.connectToServerAtStartup")
-            public boolean connectToServerAtStartup = false;
-
-            @RequiresMcRestart
-            @Comment({"Server address when connecting to server at startup.", "It works only if connectToServerAtStartup is true."})
-            @LangKey("config.mutesounds.misc.serverAddress")
-            public String serverAddress = "mc.hypixel.net";
-
-            @RequiresMcRestart
-            @Comment({"Server port when connecting to server at startup.", "It works only if connectToServerAtStartup is true."})
-            @LangKey("config.mutesounds.misc.port")
-            public int port = 25565;
-
-            @LangKey("config.mutesounds.misc.overlays._name")
-            public Overlays overlays = new Overlays();
-            public static class Overlays {
-                @LangKey("config.mutesounds.misc.overlays.positionOverlay")
-                public boolean positionOverlay = false;
-
-                @LangKey("config.mutesounds.misc.overlays.gammaOverlay")
-                public boolean gammaOverlay = false;
-
-                @LangKey("config.mutesounds.misc.overlays.pingOverlay")
-                public boolean pingOverlay = false;
-
-                @LangKey("config.mutesounds.misc.overlays.armorOverlay")
-                public boolean armorOverlay = false;
-
-                @LangKey("config.mutesounds.misc.overlays.fpsOverlay")
-                public boolean fpsOverlay = false;
-            }
-
-            @LangKey("config.mutesounds.misc.gammaBright._name")
-            public GammaBright gammaBright = new GammaBright();
-            public static class GammaBright {
-                @Config.RangeInt(min = -15000, max = 15000)
-                @LangKey("config.mutesounds.misc.gammaBright.gamma")
-                public double gamma = 15000;
-            }
-        }
-
         @LangKey("config.mutesounds.blocks._name")
         public static Blocks blocks = new Blocks();
-
-        public static class Blocks {
-            @Comment("Same sounds as grass block.")
-            @LangKey("config.mutesounds.blocks.grass")
-            public Block grass = new Block();
-
-            @Comment("Same sounds as dirt.")
-            @LangKey("config.mutesounds.blocks.gravel")
-            public Block gravel = new Block();
-
-            @Comment("Same sounds as other stones.")
-            @LangKey("config.mutesounds.blocks.stone")
-            public Block stone = new Block();
-
-            @LangKey("config.mutesounds.blocks.glass")
-            public Block glass = new Block();
-
-            public static class Block {
-                @Comment("Plays when player is breaking a block.")
-                public boolean muteHitSound = false;
-
-                @Comment("Plays when block was broken.")
-                public boolean muteBreakSound = false;
-
-                @Comment("Plays when block was placed.")
-                public boolean mutePlaceSound = false;
-
-                @Comment("Plays when player has stepped at a block.")
-                public boolean muteStepSound = false;
-
-                @Comment("Plays when fallen on from a height.")
-                public boolean muteFallSound = false;
-            }
-
-            @LangKey("config.mutesounds.blocks.water")
-            public Water water = new Water();
-            public static class Water {
-                public boolean muteWaterFlowSound = false;
-            }
-
-            @Comment("Break, place, and some sounds are managed at glass.")
-            @LangKey("config.mutesounds.blocks.portal")
-            public Portal portal = new Portal();
-            public static class Portal {
-                @Comment("Plays when player at near the portal")
-                public boolean muteAmbientSound = false;
-
-                @Comment("Plays when standing in portal")
-                public boolean muteTriggerSound = false;
-
-                @Comment("Plays when loading dimension")
-                public boolean muteTravelSound = false;
-            }
-        }
 
         @LangKey("config.mutesounds.mobs._name")
         public static Mobs mobs = new Mobs();
 
-        public static class Mobs {
-            @LangKey("config.mutesounds.mobs.endermans")
-            public Endermans endermans = new Endermans();
-
-            public static class Endermans {
-                @Comment({"Idle sound", "Subtitle: Enderman vwoops"})
-                public boolean muteAmbientSound = false;
-
-                @Comment("Subtitle: Enderman dies")
-                public boolean muteDeathSound = false;
-
-                @Comment("Subtitle: Enderman hurts")
-                public boolean muteHurtSound = false;
-
-                @Comment({"Long vwoops", "Subtitle: Enderman stare"})
-                public boolean muteStareSound = false;
-
-                @Comment({"When enderman is attacking someone.", "Subtitle: Enderman vwoops"})
-                public boolean muteScreamSound = false;
-
-                @Comment({"Subtitle: Enderman teleports"})
-                public boolean muteTeleportSound = false;
-            }
-        }
+        @LangKey("config.mutesounds.entity._name")
+        public static Entity entity = new Entity();
     }
 
     @SubscribeEvent
@@ -308,16 +219,16 @@ public class MuteSounds {
 
     @SubscribeEvent
     public static void onClientChat(ClientChatEvent e) {
-        if (e.getMessage().startsWith(".")) {
+        if (e.getMessage().startsWith(PREFIX)) {
             e.setCanceled(true);
-            String[] args = e.getMessage().replaceFirst(".", "").split(" ");
+            String[] args = e.getMessage().replaceFirst(Pattern.quote(PREFIX), "").split(" ");
             String command = args[0];
             if (!Utils.commands.containsKey(command)) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&cInvalid command, type .help to help.")));
                 return;
             }
-            List<String> argsList = new ArrayList<>(Arrays.asList(args));
-            argsList.remove(0);
+            CollectionList<String> argsList = ICollectionList.asList(args);
+            argsList.shift();
             args = argsList.toArray(new String[0]);
             Utils.commands.get(command).execute(e.getMessage(), e.getOriginalMessage(), args);
         }

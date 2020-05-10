@@ -12,6 +12,7 @@ apply plugin: 'java'
 
 repositories {
     jcenter()
+    mavenCentral()
     maven { url = "https://repo.acrylicstyle.xyz" }
 }
 
@@ -24,11 +25,14 @@ configurations {
 }
 
 dependencies {
-    compile 'xyz.acrylicstyle:Util:0.2.6'
-    shade 'xyz.acrylicstyle:Util:0.2.6'
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+    compile 'xyz.acrylicstyle:Util:0.11.1'
+    shade 'xyz.acrylicstyle:Util:0.11.1'
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    shade 'org.codehaus.groovy:groovy-all:2.4.4'
 }
 
-version = "0.0.2"
+version = "0.0.3"
 group = "xyz.acrylicstyle.mutesounds" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MuteSounds"
 

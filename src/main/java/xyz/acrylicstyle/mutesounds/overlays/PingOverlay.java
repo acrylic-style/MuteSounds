@@ -5,7 +5,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 public class PingOverlay implements Overlay {
-    private Minecraft minecraft;
+    private final Minecraft minecraft;
 
     public PingOverlay(Minecraft minecraft) {
         this.minecraft = minecraft;
