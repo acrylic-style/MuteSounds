@@ -12,6 +12,7 @@ apply plugin: 'java'
 
 repositories {
     jcenter()
+    mavenLocal()
     mavenCentral()
     maven { url = "https://repo.acrylicstyle.xyz" }
 }
@@ -26,8 +27,8 @@ configurations {
 
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
-    compile 'xyz.acrylicstyle:Util:0.11.1'
-    shade 'xyz.acrylicstyle:Util:0.11.1'
+    compile('xyz.acrylicstyle:java-util-all:0.13.2') { exclude group: 'org.json', module: 'json' }
+    shade('xyz.acrylicstyle:java-util-all:0.13.2') { exclude group: 'org.json', module: 'json' }
     compile 'org.codehaus.groovy:groovy-all:2.4.4'
     shade 'org.codehaus.groovy:groovy-all:2.4.4'
 }
@@ -98,9 +99,10 @@ processResources {
 }
 
 jar {
+
     configurations.shade.each { dep ->
         from(project.zipTree(dep)) {
-            exclude 'META-INF', 'META-INF/**'
+            exclude 'META-INF', 'META-INF/**', 'org/json'
         }
     }
 }

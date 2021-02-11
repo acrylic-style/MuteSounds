@@ -17,7 +17,7 @@ public class ArmorOverlay implements Overlay {
         this.itemRender = minecraft.getRenderItem();
     }
 
-    public void draw() {
+    public void render() {
         ScaledResolution resolution = new ScaledResolution(minecraft);
         int x = resolution.getScaledWidth();
         int y = resolution.getScaledHeight();

@@ -10,9 +10,9 @@ public class GammaOverlay implements Overlay {
         this.minecraft = minecraft;
     }
 
-    public void draw() {
+    public void render() {
         int offsetX = 5;
         int offsetY = 8;
-        minecraft.fontRenderer.drawStringWithShadow(Utils.format("Gamma: @@@%", minecraft.gameSettings.gammaSetting*100), offsetX, Utils.activeOverlays.indexOf(this)*offsetY+5, Integer.parseInt("FFAA00", 16));
+        minecraft.fontRenderer.drawStringWithShadow(String.format("Gamma: %f%%", minecraft.gameSettings.gammaSetting * 100), offsetX, Utils.activeOverlays.indexOf(this)*offsetY+5, 0xffaa00);
     }
 }

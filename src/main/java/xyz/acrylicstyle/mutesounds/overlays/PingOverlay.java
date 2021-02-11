@@ -12,12 +12,12 @@ public class PingOverlay implements Overlay {
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void draw() {
+    public void render() {
         int offsetX = 5;
         int offsetY = 8;
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         int responseTime = (player == null || player.connection == null || player.connection.getPlayerInfo(player.getGameProfile().getId()) == null) ? -1 : player.connection.getPlayerInfo(player.getGameProfile().getId()).getResponseTime();
-        String s = Utils.format("Ping: @@@ms", responseTime) + (Utils.isPinged ? Utils.format(" (@@@ms)", Utils.ping) : "");
-        minecraft.fontRenderer.drawStringWithShadow(s, offsetX, Utils.activeOverlays.indexOf(this)*offsetY+5, Integer.parseInt("FFAA00", 16));
+        String s = String.format("Ping: %sms", responseTime);
+        minecraft.fontRenderer.drawStringWithShadow(s, offsetX, Utils.activeOverlays.indexOf(this) * offsetY + 5, 0xffaa00);
     }
 }

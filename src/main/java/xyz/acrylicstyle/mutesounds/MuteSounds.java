@@ -28,17 +28,19 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
-import util.CollectionList;
 import util.ICollectionList;
 import xyz.acrylicstyle.mutesounds.overlays.Overlay;
+import xyz.acrylicstyle.mutesounds.utils.ChatColor;
 import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
 
-import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.*;
-import static xyz.acrylicstyle.mutesounds.utils.Utils.translateChatColor;
+import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.Blocks;
+import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.Entity;
+import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.Misc;
+import static xyz.acrylicstyle.mutesounds.utils.ConfigurationClasses.Mobs;
 
 @Mod(modid = MuteSounds.MOD_ID, name = MuteSounds.NAME, version = MuteSounds.VERSION)
 public class MuteSounds {
@@ -47,7 +49,7 @@ public class MuteSounds {
     public static final String NAME = "Mute Sounds";
     public static final String VERSION = "1.0";
     public static KeyBinding toggleFB;
-    public static boolean isFB = false;
+    public static boolean isFullBright = false;
     public static Logger logger;
 
     @EventHandler
@@ -81,7 +83,6 @@ public class MuteSounds {
         ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
         Minecraft.getMinecraft().gameSettings.gammaSetting = 1;
         overlayCheck();
-        Utils.startPingTimer();
         if (Configuration.misc.connectToServerAtStartup) FMLClientHandler.instance().connectToServerAtStartup(Configuration.misc.serverAddress, Configuration.misc.port);
     }
 
@@ -203,16 +204,16 @@ public class MuteSounds {
             GameSettings settings = Minecraft.getMinecraft().gameSettings;
             ResourceLocation resourceLocation = new ResourceLocation("entity.experience_orb.pickup");
             if (Minecraft.getMinecraft().player != null) Minecraft.getMinecraft().player.playSound(new SoundEvent(resourceLocation), 100, 1);
-            if (isFB) {
+            if (isFullBright) {
                 settings.gammaSetting = 1F;
-                isFB = false;
+                isFullBright = false;
                 if (Minecraft.getMinecraft().player != null)
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&eFull Bright is now &cDisabled&e!")));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(ChatColor.YELLOW + "Full Bright is now " + ChatColor.RED + "Disabled" + ChatColor.YELLOW + "!"));
             } else {
                 settings.gammaSetting = (float) (Configuration.misc.gammaBright.gamma/100F);
-                isFB = true;
+                isFullBright = true;
                 if (Minecraft.getMinecraft().player != null)
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&eFull Bright is now &aEnabled&e!")));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(ChatColor.YELLOW + "Full Bright is now " + ChatColor.GREEN + "Enabled" + ChatColor.YELLOW + "!"));
             }
         }
     }
@@ -220,14 +221,14 @@ public class MuteSounds {
     @SubscribeEvent
     public static void onClientChat(ClientChatEvent e) {
         if (e.getMessage().startsWith(PREFIX)) {
-            e.setCanceled(true);
-            String[] args = e.getMessage().replaceFirst(Pattern.quote(PREFIX), "").split(" ");
+            String[] args = e.getMessage().replaceFirst(Pattern.quote(PREFIX), "").split("\\s+");
             String command = args[0];
             if (!Utils.commands.containsKey(command)) {
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&cInvalid command, type .help to help.")));
                 return;
             }
-            CollectionList<String> argsList = ICollectionList.asList(args);
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(e.getOriginalMessage());
+            e.setCanceled(true);
+            ICollectionList<String> argsList = ICollectionList.asList(args);
             argsList.shift();
             args = argsList.toArray(new String[0]);
             Utils.commands.get(command).execute(e.getMessage(), e.getOriginalMessage(), args);
@@ -237,7 +238,7 @@ public class MuteSounds {
     @SubscribeEvent
     public static void onRenderGameOverlay(RenderGameOverlayEvent.Post e) {
         if (e.getType() != RenderGameOverlayEvent.ElementType.HOTBAR) return;
-        if (Configuration.misc.overlays.armorOverlay) Utils.overlays.get(3).draw();
-        Utils.activeOverlays.forEach(Overlay::draw);
+        if (Configuration.misc.overlays.armorOverlay) Utils.overlays.get(3).render();
+        Utils.activeOverlays.forEach(Overlay::render);
     }
 }

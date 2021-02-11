@@ -4,11 +4,10 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
-import util.CollectionList;
 import util.ICollectionList;
 import xyz.acrylicstyle.mutesounds.MuteSounds;
+import xyz.acrylicstyle.mutesounds.utils.ChatColor;
 import xyz.acrylicstyle.mutesounds.utils.PeriodCommand;
-import xyz.acrylicstyle.mutesounds.utils.Utils;
 
 import java.lang.reflect.Modifier;
 
@@ -18,25 +17,26 @@ public class DebugCommand extends PeriodCommand {
     @Override
     public void execute(String message, String originalMessage, String[] args) {
         if (args.length == 0) {
-            minecraft.player.sendMessage(new TextComponentString(Utils.translateChatColor("&bUsage: &d" + MuteSounds.PREFIX + "debug <Script>")));
+            minecraft.player.sendMessage(new TextComponentString(ChatColor.AQUA + "Usage: " + ChatColor.PINK + MuteSounds.PREFIX + "debug <Script>"));
             return;
         }
-        CollectionList<String> argsList = ICollectionList.asList(args);
-        argsList.shift();
-        String argsString = argsList.join(" ");
-        try {
-            Object result = eval(args, argsString);
-            minecraft.player.sendMessage(new TextComponentString(Utils.translateChatColor("&aResult[" + (result != null ? Modifier.toString(result.getClass().getModifiers()) : "<?>") + "](" + (result != null ? result.getClass().getCanonicalName() : "null") + "):")));
-            minecraft.player.sendMessage(new TextComponentString(Utils.translateChatColor("&a" + result)));
-        } catch (Throwable e) {
-            minecraft.player.sendMessage(new TextComponentString(Utils.translateChatColor("&cAn error occurred: " + e.getClass().getSimpleName() + ": " + e.getMessage())));
-            for (StackTraceElement el : e.getStackTrace()) minecraft.player.sendMessage(new TextComponentString(Utils.translateChatColor("&c" + el.toString())));
-        }
+        new Thread(() -> {
+            ICollectionList<String> argsList = ICollectionList.asList(args);
+            String argsString = argsList.join(" ");
+            try {
+                Object result = eval(args, argsString);
+                sendMessage(ChatColor.GREEN.toString() + "Result[" + (result != null ? Modifier.toString(result.getClass().getModifiers()) : "<?>") + "](" + (result != null ? result.getClass().getCanonicalName() : "null") + "):");
+                sendMessage(ChatColor.GREEN.toString() + result);
+            } catch (Throwable e) {
+                sendMessage(ChatColor.RED + "An error occurred: " + e.getClass().getSimpleName() + ": " + e.getMessage());
+                for (StackTraceElement el : e.getStackTrace()) sendMessage(ChatColor.RED + el.toString());
+            }
+        }).start();
     }
 
     @Override
     public String getDescription() {
-        return "&aExecutes script.";
+        return ChatColor.GREEN + "Executes script.";
     }
 
     private Object eval(String[] args, String expression) {

@@ -6,10 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
 import xyz.acrylicstyle.mutesounds.MuteSounds;
+import xyz.acrylicstyle.mutesounds.utils.ChatColor;
 import xyz.acrylicstyle.mutesounds.utils.PeriodCommand;
 import xyz.acrylicstyle.mutesounds.utils.Utils;
-
-import static xyz.acrylicstyle.mutesounds.utils.Utils.translateChatColor;
 
 public class FullBrightCommand extends PeriodCommand {
     @Override
@@ -26,26 +25,23 @@ public class FullBrightCommand extends PeriodCommand {
         if (Minecraft.getMinecraft().player != null) Minecraft.getMinecraft().player.playSound(new SoundEvent(resourceLocation), 100, 1);
         if (args.length >= 1) {
             settings.gammaSetting = (float) (gamma/100F);
-            MuteSounds.isFB = true;
-            if (Minecraft.getMinecraft().player != null)
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&aGamma has been set to &a" + args[0] + "%&e!")));
+            MuteSounds.isFullBright = true;
+            sendMessage(ChatColor.YELLOW + "Gamma has been set to " + ChatColor.GREEN + args[0] + "%" + ChatColor.YELLOW + "!");
             return;
         }
-        if (MuteSounds.isFB) {
+        if (MuteSounds.isFullBright) {
             settings.gammaSetting = 1F;
-            MuteSounds.isFB = false;
-            if (Minecraft.getMinecraft().player != null)
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&eFull Bright is now &cDisabled&e!")));
+            MuteSounds.isFullBright = false;
+            sendMessage(ChatColor.YELLOW + "Full Bright is now " + ChatColor.RED + "Disabled" + ChatColor.YELLOW + "!");
         } else {
-            settings.gammaSetting = (float) (gamma/100F);
-            MuteSounds.isFB = true;
-            if (Minecraft.getMinecraft().player != null)
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString(translateChatColor("&eFull Bright is now &aEnabled&e!")));
+            settings.gammaSetting = (float) (gamma / 100F);
+            MuteSounds.isFullBright = true;
+            sendMessage(ChatColor.YELLOW + "Full Bright is now " + ChatColor.GREEN + "Enabled" + ChatColor.YELLOW + "!");
         }
     }
 
     @Override
     public String getDescription() {
-        return "Toggles Full Bright. &bUsage: &e.fullbright [gamma%]";
+        return "Toggles Full Bright. " + ChatColor.AQUA + "Usage: " + ChatColor.YELLOW + ".fullbright [gamma%]";
     }
 }

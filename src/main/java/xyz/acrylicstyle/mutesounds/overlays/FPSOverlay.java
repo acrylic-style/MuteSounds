@@ -9,9 +9,9 @@ public class FPSOverlay implements Overlay {
     public FPSOverlay(Minecraft minecraft) { this.minecraft = minecraft; }
 
     @Override
-    public void draw() {
+    public void render() {
         int offsetX = 5;
         int offsetY = 8;
-        minecraft.fontRenderer.drawStringWithShadow(Utils.format("FPS: @@@ fps", Minecraft.getDebugFPS()), offsetX, Utils.activeOverlays.indexOf(this)*offsetY+5, Integer.parseInt("FFAA00", 16));
+        minecraft.fontRenderer.drawStringWithShadow(String.format("FPS: %d fps", Minecraft.getDebugFPS()), offsetX, Utils.activeOverlays.indexOf(this) * offsetY + 5, 0xffaa00);
     }
 }
